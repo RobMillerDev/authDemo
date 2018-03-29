@@ -9,8 +9,7 @@ const express = require("express"),
     db = require("diskdb");
 
 //connect to db
-db.connect("data", ["users"]);
-db.connect("data", ["images"]);
+db.connect("data", ["users", "images"]);
 
 
 
@@ -29,8 +28,8 @@ app.use(bodyParser.urlencoded({
 app.use(session({
   cookieName: 'session',
   secret: 'cookiecat', // <-- do not actually use use this password
-  duration: 30 * 60 * 1000,
-  activeDuration: 5 * 60 * 1000,
+  duration: 24 * 60 * 60 * 1000,
+  activeDuration: 60 * 60 * 1000,
 }));
 
 //static server
@@ -188,19 +187,23 @@ app.post("/upload", upload.single("photo"), function(req, res){
     //check if logged in
     if(req.session.user){
 
-        //generate id for image
-        let id = shortId.generate();
+        if(req.file){
+            //generate id for image
+            let id = shortId.generate();
 
-        //save image
-        db.images.save({
-            id: id,
-            path: req.file.filename,
-            user: req.session.user.username,
-            time: Date.now()
-        });
+            //save image
+            db.images.save({
+                id: id,
+                path: req.file.filename,
+                user: req.session.user.username,
+                time: Date.now()
+            });
 
-        //redirect back too dashboard
-        res.redirect("/dash");
+            //redirect back too dashboard
+            res.redirect("/dash");
+        } else {
+            res.render("errorPage", {error: "no file selected"});
+        }
     } else {
     //if not logged in
         res.render("errorPage", {error: "you're not logged in"});
