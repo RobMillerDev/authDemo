@@ -38,6 +38,21 @@ app.use(express.static("views"));
 
 app.set("view engine", "ejs");
 
+//main route
+app.get("/", function(req, res){
+
+    //check if user is logged in
+    if(req.session.user){
+
+        //if they are logged in send too dash
+        res.redirect("/dash");
+    } else {
+
+        //otherwise send too index
+        res.render("index");
+    }
+});
+
 
 //sign up route
 app.post("/signUp", function(req, res){
@@ -125,6 +140,16 @@ app.post("/login", function(req, res){
     } else {
         res.render("errorPage", {error: "we couldn't find any users by that name :("});
     }
+});
+
+//logout route
+app.get("/logout", function(req, res){
+
+    //reset session key
+    req.session.reset();
+
+    //redirect too home
+    res.redirect("/");
 });
 
 app.get("/dash", function(req, res){
