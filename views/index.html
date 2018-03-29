@@ -1,0 +1,34 @@
+<doctype HTML>
+<html>
+    <head>
+        <title>login demo</title>
+        <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+    </head>
+    <body>
+        <div class="row">
+
+            <!-- sign up -->
+            <div class="col-sm-6">
+                sign up
+                <form method="POST" action="/signUp">
+                    <input type="text" name="username" placeholder="username"></input><br>
+                    <input type="password" name="password" placeholder="password"></input><br>
+                    <input type="password" name="passwordConfirm" placeholder="confirm password"></input><br>
+                    <input type="text" name="email" placeholder="email"></input><br>
+                    <input type="submit" value="sign up"></input>
+                </form>
+            </div>
+
+            <!-- log in -->
+            <div class="col-sm-6">
+                log in
+                <form method="POST" action="/login">
+                    <input type="text" name="username" placeholder="username"></input><br>
+                    <input type="password" name="password" placeholder="password"></input><br>
+                    <input type="submit" value="log in"></input>
+                </form>                
+            </div>
+        </div>
+    </body>
+</html>

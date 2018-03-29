@@ -1,0 +1,17 @@
+<doctype HTML>
+<html>
+    <head>
+        <title>login demo</title>
+        <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+    </head>
+    <body>
+        <h2>Hello <%= username %>! welcome to IMGHost!</h2>
+        
+        <a href="/upload">upload</a><br><br>
+
+        <% for(i = 0; i < images.length; i++) { %>
+            <a href="/image/<%= images[i].id %>"><%= images[i].id %></a><br>
+        <% } %>
+    </body>
+</html>
