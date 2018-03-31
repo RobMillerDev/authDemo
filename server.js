@@ -17,6 +17,7 @@ db.connect("data", ["users", "images"]);
 const app = express();
 const port = 8080;
 
+
 const upload = multer({dest: 'uploads'});
 
 //bodyparser settings
@@ -27,7 +28,7 @@ app.use(bodyParser.urlencoded({
 //session settings
 app.use(session({
   cookieName: 'session',
-  secret: 'cookiecat', // <-- do not actually use use this password
+  secret: 'secret password',
   duration: 24 * 60 * 60 * 1000,
   activeDuration: 60 * 60 * 1000,
 }));
@@ -55,18 +56,20 @@ app.get("/", function(req, res){
 
 //sign up route
 app.post("/signUp", function(req, res){
+
     bcrypt.hash(req.body.password, 12, function(err, hash){
 
         //if a hash error occurs
         if(err){
+
             res.render("errorPage", {error: "hash error occured, please try again"});
         } else {
-        //if no error occurs
+
             //if password matches confirm
             if(req.body.password === req.body.passwordConfirm){
 
                 //checking db for other users with same username or email
-                let checkUsername = db.users.find({
+                let checkUser = db.users.find({
                     username: req.body.username
                 });
 
@@ -75,6 +78,7 @@ app.post("/signUp", function(req, res){
                 });
 
                 if(checkUsername.length > 0 || checkEmail.length > 0){
+
                     //check if account info is already being used
                     res.render("errorPage", {error: "that email or username is already being used :("});
                 } else {
@@ -137,6 +141,8 @@ app.post("/login", function(req, res){
             }
         });
     } else {
+
+        //if user by that name could not be found
         res.render("errorPage", {error: "we couldn't find any users by that name :("});
     }
 });
@@ -152,10 +158,10 @@ app.get("/logout", function(req, res){
 });
 
 app.get("/dash", function(req, res){
+
     if(req.session.user){
-        /*
-        ADD IMAGE SHARING BITS HERE <-- innaccurate now
-        */
+        
+        //get images uploaded by user
         let images = db.images.find({
             user: req.session.user.username
         });
@@ -177,6 +183,7 @@ app.get("/upload", function(req, res){
         //if logged in render upload page
         res.render("upload");
     } else {
+
         //otherwise send login error
         res.render("errorPage", {error: "you're not logged in"});
     }
@@ -202,10 +209,12 @@ app.post("/upload", upload.single("photo"), function(req, res){
             //redirect back too dashboard
             res.redirect("/dash");
         } else {
+
             res.render("errorPage", {error: "no file selected"});
         }
     } else {
-    //if not logged in
+
+        //if not logged in
         res.render("errorPage", {error: "you're not logged in"});
     }
 });
@@ -228,6 +237,7 @@ app.get("/image/:id", function(req, res){
         fs.readFile("uploads/" + image[0].path, function(err, data){
 
             if(err){
+
                 //render error page
                 res.render("errorPage", {error: "an error occured :("});
             } else {
